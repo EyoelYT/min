@@ -7,6 +7,7 @@ var showDividerCheckbox = document.getElementById('checkbox-show-divider')
 var userscriptsCheckbox = document.getElementById('checkbox-userscripts')
 var userscriptsShowDirectorySection = document.getElementById('userscripts-show-directory')
 var separateTitlebarCheckbox = document.getElementById('checkbox-separate-titlebar')
+var disableGoBackwardAndGoForwardCheckbox = document.getElementById('checkbox-disable-go-backward-and-go-forward-gestures')
 var openTabsInForegroundCheckbox = document.getElementById('checkbox-open-tabs-in-foreground')
 var autoPlayCheckbox = document.getElementById('checkbox-enable-autoplay')
 var userAgentCheckbox = document.getElementById('checkbox-user-agent')
@@ -314,6 +315,18 @@ settings.get('useSeparateTitlebar', function (value) {
 separateTitlebarCheckbox.addEventListener('change', function (e) {
   settings.set('useSeparateTitlebar', this.checked)
   showRestartRequiredBanner()
+})
+
+/* gesture controlled go-back and go-forward setting */
+
+settings.get('disableGoBackwardAndGoForward', function (value) {
+  if (value === true) {
+    disableGoBackwardAndGoForwardCheckbox.checked = true
+  }
+})
+
+disableGoBackwardAndGoForwardCheckbox.addEventListener('change', function (e) {
+  settings.set('disableGoBackwardAndGoForward', this.checked)
 })
 
 /* tabs in foreground setting */

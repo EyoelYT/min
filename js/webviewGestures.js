@@ -1,4 +1,5 @@
 var webviews = require('webviews.js')
+var settings = require('util/settings/settings.js')
 
 var webviewGestures = {
   showBackArrow: function () {
@@ -94,23 +95,26 @@ function onSwipeGestureLowVelocity () {
 
   webviews.callAsync(tabs.getSelected(), 'getZoomFactor', function(err, result) {
     const minScrollDistance = 150 * result;
+    const isEnabled = !settings.get('disableGoBackwardAndGoForward')
 
+    if (isEnabled) {
       if ((leftMouseMove / rightMouseMove > 5) || (rightMouseMove / leftMouseMove > 5)) {
-      // swipe to the left to go forward
-      if (leftMouseMove - beginningScrollRight > minScrollDistance && Math.abs(horizontalMouseMove / verticalMouseMove) > 3) {
-        if (beginningScrollRight < 5) {
-          resetDistanceCounters()
-          resetScrollCounters()
-          webviews.callAsync(tabs.getSelected(), 'goForward')
+        // swipe to the left to go forward
+        if (leftMouseMove - beginningScrollRight > minScrollDistance && Math.abs(horizontalMouseMove / verticalMouseMove) > 3) {
+          if (beginningScrollRight < 5) {
+            resetDistanceCounters()
+            resetScrollCounters()
+            webviews.callAsync(tabs.getSelected(), 'goForward')
+          }
         }
-      }
 
-      // swipe to the right to go backwards
-      if (rightMouseMove + beginningScrollLeft > minScrollDistance && Math.abs(horizontalMouseMove / verticalMouseMove) > 3) {
-        if (beginningScrollLeft < 5) {
-          resetDistanceCounters()
-          resetScrollCounters()
-          webviews.goBackIgnoringRedirects(tabs.getSelected())
+        // swipe to the right to go backwards
+        if (rightMouseMove + beginningScrollLeft > minScrollDistance && Math.abs(horizontalMouseMove / verticalMouseMove) > 3) {
+          if (beginningScrollLeft < 5) {
+            resetDistanceCounters()
+            resetScrollCounters()
+            webviews.goBackIgnoringRedirects(tabs.getSelected())
+          }
         }
       }
     }
